@@ -75,7 +75,28 @@
   - Fix any layout issues found during testing
   - _Requirements: 2.1, 2.2, 2.3_
 
-- [ ] 12. Final integration and quality assurance
+- [ ] 12. Integrate search functionality into header component
+  - Move search form elements from 03_searchform.html to 01_header.html
+  - Create compact header search design that works on mobile and desktop
+  - Implement collapsible search interface for mobile devices
+  - Maintain search functionality while improving header layout
+  - _Requirements: 1.1, 2.1, 3.1, 3.2_
+
+- [ ] 13. Populate comparison table with clinic data
+  - Add actual clinic data to comparison table tbody in 06_comparisontable.html
+  - Implement dynamic data loading from clinic database
+  - Create responsive table design that works on all screen sizes
+  - Add proper clinic logos, pricing, and feature comparisons
+  - _Requirements: 1.1, 2.1, 3.1_
+
+- [ ] 14. Fix and populate detailed content component
+  - Add comprehensive clinic detail content to 07_detailedcontent.html
+  - Implement clinic information sections (points, pricing, equipment)
+  - Create dynamic content loading based on selected clinic
+  - Add proper images and detailed information display
+  - _Requirements: 1.1, 2.1, 3.1_
+
+- [ ] 15. Final integration and quality assurance
   - Verify all components work together seamlessly
   - Test iframe communication functionality
   - Confirm no JavaScript errors in console

@@ -342,7 +342,8 @@
                             <th>詳細</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="clinic-table-body">
+                        <!-- Dynamic content will be loaded here -->
                     </tbody>
                 </table>
             </div>
@@ -382,6 +383,179 @@
                 console.log('Store list link clicked');
             });
         });
+
+        // データを動的に読み込む関数
+        function loadClinicData() {
+            // 地域IDを取得（URLパラメータまたはデフォルト）
+            const urlParams = new URLSearchParams(window.location.search);
+            const regionId = urlParams.get('region_id') || '013'; // デフォルト: 千葉
+
+            // clinic-database.js からデータを取得
+            if (typeof CLINIC_DATABASE !== 'undefined' && CLINIC_DATABASE[regionId]) {
+                const regionData = CLINIC_DATABASE[regionId];
+                populateTable(regionData.clinics);
+            } else {
+                // フォールバックデータを使用
+                populateTableWithFallback();
+            }
+        }
+
+        function populateTable(clinics) {
+            const tbody = document.getElementById('clinic-table-body');
+            tbody.innerHTML = '';
+
+            clinics.forEach((clinic, index) => {
+                const row = document.createElement('tr');
+                row.className = 'clinic-row';
+                
+                // 1位の場合は特別クラスを追加
+                if (index === 0) {
+                    row.classList.add('top-clinic');
+                }
+
+                row.innerHTML = `
+                    <td class="clinic-cell">
+                        ${index === 0 ? '<div class="recommended-badge">おすすめ</div>' : ''}
+                        <div class="clinic-logo">${clinic.name.charAt(0)}</div>
+                        <div class="clinic-name">${clinic.name}</div>
+                    </td>
+                    <td class="clinic-cell">
+                        <div class="feature-icon ${getEffectClass(clinic.rating)}">
+                            <i class="fas fa-yen-sign"></i>
+                        </div>
+                        <div class="feature-text">${clinic.price}</div>
+                    </td>
+                    <td class="clinic-cell">
+                        <div class="feature-icon ${getEffectClass(clinic.rating)}">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="feature-text">${clinic.rating}</div>
+                    </td>
+                    <td class="clinic-cell">
+                        <div class="feature-icon excellent">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="feature-text">${clinic.features[0] || '高品質施術'}</div>
+                    </td>
+                    <td class="clinic-cell">
+                        <button class="btn-primary btn-small" onclick="viewDetails('${clinic.name}')">
+                            詳細
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        function populateTableWithFallback() {
+            const fallbackData = [
+                {
+                    name: 'SBC湘南美容クリニック',
+                    price: '月々3,000円〜',
+                    rating: '★★★★★ (4.7)',
+                    features: ['業界最安級料金設定']
+                },
+                {
+                    name: 'リゼクリニック',
+                    price: '月々3,700円〜', 
+                    rating: '★★★★☆ (4.5)',
+                    features: ['3種類の医療レーザー']
+                },
+                {
+                    name: 'エミナルクリニック',
+                    price: '月々1,000円〜',
+                    rating: '★★★★☆ (4.3)',
+                    features: ['最短5ヶ月で完了']
+                }
+            ];
+            
+            populateTable(fallbackData);
+        }
+
+        function getEffectClass(rating) {
+            const score = parseFloat(rating.match(/\(([\d.]+)\)/)?.[1] || '4.0');
+            if (score >= 4.5) return 'excellent';
+            if (score >= 4.0) return 'good';
+            return 'fair';
+        }
+
+        function viewDetails(clinicName) {
+            console.log('詳細表示:', clinicName);
+            
+            // 詳細ページにナビゲート
+            if (window.parent) {
+                window.parent.postMessage({
+                    type: 'navigate',
+                    url: '#detailed-content',
+                    clinic: clinicName
+                }, '*');
+            }
+        }
+
+        // ページ読み込み時にデータを読み込む
+        document.addEventListener('DOMContentLoaded', function() {
+            loadClinicData();
+        });
+
+        // 地域変更時の対応
+        window.addEventListener('message', function(event) {
+            if (event.data.type === 'region-change') {
+                loadClinicData();
+            }
+        });
     </script>
+
+    <style>
+        /* 追加スタイル */
+        .btn-small {
+            padding: var(--space-2) var(--space-3);
+            font-size: var(--text-xs);
+            min-height: 32px;
+        }
+
+        .top-clinic {
+            background: linear-gradient(135deg, rgba(241, 196, 15, 0.1) 0%, rgba(243, 156, 18, 0.1) 100%);
+        }
+
+        .top-clinic .clinic-cell {
+            position: relative;
+        }
+
+        .clinic-row:hover {
+            background-color: var(--neutral-light);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .clinic-cell {
+            transition: all var(--transition-base);
+        }
+
+        .feature-text {
+            font-weight: 600;
+            text-align: center;
+        }
+
+        @media (max-width: 767px) {
+            .comparison-table {
+                font-size: var(--text-xs);
+            }
+            
+            .clinic-name {
+                font-size: 10px;
+                line-height: 1.2;
+            }
+            
+            .feature-text {
+                font-size: 9px;
+            }
+            
+            .btn-small {
+                padding: var(--space-1) var(--space-2);
+                font-size: 10px;
+            }
+        }
+    </style>
 </body>
 </html>

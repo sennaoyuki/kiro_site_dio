@@ -28,7 +28,17 @@
     <!-- 統一ランキング同期システム -->
     <script src="clinic-database-generated.js"></script>
     <script src="region-config-generated.js"></script>
+    
+    <!-- パラメータベースランキングシステム -->
+    <script src="parameter-csv-data-loader.js"></script>
+    <script src="parameter-handler.js"></script>
+    <script src="parameter-ranking-engine.js"></script>
+    <script src="parameter-error-handler.js"></script>
+    
+    <!-- 拡張版ランキング同期システム（既存システムを継承） -->
     <script src="ranking-sync-system.js"></script>
+    <script src="ranking-sync-system-enhanced.js"></script>
+    <script src="iframe-parameter-handler.js"></script>
     
     <script>
         // 全てのiframe要素を格納する配列
@@ -76,16 +86,27 @@
         function passUrlParametersToIframes() {
             const urlParams = new URLSearchParams(window.location.search);
             const regionId = urlParams.get('region_id');
+            const parameterNo = urlParams.get('parameter_no');
             
-            if (regionId) {
-                console.log('URLパラメータを検出:', regionId);
+            if (regionId || parameterNo) {
+                console.log('URLパラメータを検出:', { regionId, parameterNo });
                 
-                // 全てのiframeのsrcにregion_idを追加
+                // 全てのiframeのsrcにパラメータを追加
                 const iframes = document.querySelectorAll('iframe');
                 iframes.forEach(iframe => {
                     const currentSrc = iframe.src;
+                    let newSrc = currentSrc;
                     const separator = currentSrc.includes('?') ? '&' : '?';
-                    const newSrc = `${currentSrc}${separator}region_id=${regionId}`;
+                    
+                    if (regionId) {
+                        newSrc = `${newSrc}${separator}region_id=${regionId}`;
+                    }
+                    
+                    if (parameterNo) {
+                        const separator2 = newSrc.includes('?') ? '&' : '?';
+                        newSrc = `${newSrc}${separator2}parameter_no=${parameterNo}`;
+                    }
+                    
                     iframe.src = newSrc;
                     console.log(`iframe src更新: ${currentSrc} → ${newSrc}`);
                 });
