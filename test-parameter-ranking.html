@@ -296,6 +296,7 @@
             }
             
             let html = `<h3>パラメータ番号: ${data.parameter_no}</h3>`;
+            html += `<p>地域: ${data.region || '不明'}</p>`;
             html += `<p>クリニック数: ${data.totalClinics}</p>`;
             
             data.clinics.forEach(clinic => {
@@ -399,6 +400,7 @@
                 statistics: rankingEngine ? rankingEngine.getStatistics() : {},
                 currentData: currentData ? {
                     parameter_no: currentData.parameter_no,
+                    region: currentData.region,
                     clinicCount: currentData.totalClinics,
                     clinics: currentData.clinics.map(c => `${c.rank}. ${c.clinic_name}`)
                 } : 'No data',

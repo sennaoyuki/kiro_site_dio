@@ -64,19 +64,22 @@ class ParameterErrorHandler {
     handleCsvLoadError(error) {
         console.warn('⚠️ CSVファイルの読み込みに失敗しました。デフォルトデータを使用します。');
         
-        // デフォルトデータの生成
+        // デフォルトデータの生成（実際のクリニック名を使用）
         const defaultData = {
             clinics: new Map([
-                [1, { clinic_id: 1, clinic_name: 'SBCスキンクリニック', code: 'SBC' }],
-                [2, { clinic_id: 2, clinic_name: 'エミシアクリニック', code: 'EMI' }],
-                [3, { clinic_id: 3, clinic_name: 'リアルビューティークリニック', code: 'RBC' }],
-                [4, { clinic_id: 4, clinic_name: 'ドクター松井クリニック', code: 'DMC' }],
-                [5, { clinic_id: 5, clinic_name: 'エミナルクリニック', code: 'EMN' }]
+                [1, { clinic_id: 1, clinic_name: 'DIO', code: 'dio' }],
+                [2, { clinic_id: 2, clinic_name: 'エミナルクリニック', code: 'eminal' }],
+                [3, { clinic_id: 3, clinic_name: 'ウララクリニック', code: 'urara' }],
+                [4, { clinic_id: 4, clinic_name: 'リエートクリニック', code: 'lieto' }],
+                [5, { clinic_id: 5, clinic_name: '湘南美容クリニック', code: 'sbc' }]
             ]),
             rankings: new Map([
                 ['001', { parameter_no: '001', no1: 1, no2: 2, no3: 3, no4: 4, no5: 5 }]
             ]),
-            stores: new Map()
+            stores: new Map(),
+            regions: new Map([
+                ['001', { parameter_no: '001', region: '北海道' }]
+            ])
         };
 
         // グローバルオブジェクトにデフォルトデータを設定
@@ -84,6 +87,7 @@ class ParameterErrorHandler {
             window.rankingSyncSystem.parameterRankingEngine.clinicData = defaultData.clinics;
             window.rankingSyncSystem.parameterRankingEngine.rankingData = defaultData.rankings;
             window.rankingSyncSystem.parameterRankingEngine.storeData = defaultData.stores;
+            window.rankingSyncSystem.parameterRankingEngine.regionData = defaultData.regions;
         }
 
         return defaultData;

@@ -7,6 +7,7 @@ class ParameterRankingEngine {
         this.clinicData = csvData.clinics || new Map();
         this.rankingData = csvData.rankings || new Map();
         this.storeData = csvData.stores || new Map();
+        this.regionData = csvData.regions || new Map();
     }
 
     /**
@@ -45,8 +46,13 @@ class ParameterRankingEngine {
             }
         }
 
+        // 地域情報を追加
+        const regionInfo = this.regionData.get(rankingOrder.parameter_no);
+        const regionName = regionInfo ? regionInfo.region : '';
+
         return {
             parameter_no: rankingOrder.parameter_no,
+            region: regionName,
             clinics: rankedClinics,
             totalClinics: rankedClinics.length
         };
@@ -79,6 +85,7 @@ class ParameterRankingEngine {
         // データが全く無い場合の最終フォールバック
         return {
             parameter_no: '001',
+            region: '北海道',
             clinics: [],
             totalClinics: 0
         };
@@ -163,8 +170,18 @@ class ParameterRankingEngine {
             totalClinics: this.clinicData.size,
             totalParameters: this.rankingData.size,
             totalStores: Array.from(this.storeData.values()).reduce((sum, stores) => sum + stores.length, 0),
-            clinicsWithStores: this.storeData.size
+            clinicsWithStores: this.storeData.size,
+            totalRegions: this.regionData.size
         };
+    }
+
+    /**
+     * パラメータ番号から地域名を取得
+     */
+    getRegionByParameter(parameterNo) {
+        const paddedNo = parameterNo.padStart(3, '0');
+        const regionInfo = this.regionData.get(paddedNo);
+        return regionInfo ? regionInfo.region : null;
     }
 }
 

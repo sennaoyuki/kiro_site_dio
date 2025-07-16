@@ -139,8 +139,10 @@ class EnhancedRankingSyncSystem extends RankingSyncSystem {
         
         // 一時的に現在の地域データを保存してレガシーデータに置き換え
         const originalData = this.currentRegionData;
+        const regionName = this.parameterData.region || `パラメータ${this.parameterData.parameter_no}`;
+        
         this.currentRegionData = {
-            name: `パラメータ${this.parameterData.parameter_no}`,
+            name: regionName,
             clinics: legacyData.map(clinic => ({
                 name: clinic.name,
                 price: '月々1,900円',
@@ -188,7 +190,7 @@ class EnhancedRankingSyncSystem extends RankingSyncSystem {
             section.innerHTML = `
                 <div class="clinic-header" style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);">
                     <h2>${clinic.clinic_name}</h2>
-                    <div class="clinic-subtitle">第${clinic.rank}位 - クリニックコード: ${clinic.code}</div>
+                    <div class="clinic-subtitle">第${clinic.rank}位 - ${this.parameterData.region}エリア</div>
                 </div>
 
                 <div class="banner-image">
@@ -313,6 +315,7 @@ class EnhancedRankingSyncSystem extends RankingSyncSystem {
             }
 
             console.log(`\n📊 === パラメータ ${this.parameterData.parameter_no} のランキング ===`);
+            console.log(`🗾 地域: ${this.parameterData.region}`);
             this.parameterData.clinics.forEach((clinic) => {
                 console.log(`${clinic.rank}位: ${clinic.clinic_name} (ID: ${clinic.clinic_id})`);
                 console.log(`     📍 ${clinic.stores.length}店舗展開`);

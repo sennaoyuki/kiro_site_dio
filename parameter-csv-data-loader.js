@@ -7,6 +7,7 @@ class ParameterCSVDataLoader {
         this.clinicData = new Map();
         this.rankingData = new Map();
         this.storeData = new Map();
+        this.regionData = new Map();
         this.dataPath = 'data2/';
     }
 
@@ -15,13 +16,14 @@ class ParameterCSVDataLoader {
      */
     async loadAllData() {
         try {
-            const [clinics, rankings, stores] = await Promise.all([
+            const [clinics, rankings, stores, regions] = await Promise.all([
                 this.loadClinicData(),
                 this.loadRankingData(),
-                this.loadStoreData()
+                this.loadStoreData(),
+                this.loadRegionData()
             ]);
 
-            return { clinics, rankings, stores };
+            return { clinics, rankings, stores, regions };
         } catch (error) {
             console.error('Failed to load CSV data:', error);
             throw error;
@@ -179,6 +181,46 @@ class ParameterCSVDataLoader {
      */
     getStoresByClinicName(clinicName) {
         return this.storeData.get(clinicName) || [];
+    }
+
+    /**
+     * 地域データ（region.csv）を読み込む
+     */
+    async loadRegionData() {
+        try {
+            const response = await fetch(`${this.dataPath}出しわけSS - region.csv`);
+            if (!response.ok) throw new Error(`Failed to load region data: ${response.status}`);
+            
+            const text = await response.text();
+            const lines = text.split('\n').filter(line => line.trim());
+            
+            // ヘッダー行をスキップ
+            for (let i = 1; i < lines.length; i++) {
+                const [parameter_no, region] = this.parseCSVLine(lines[i]);
+                if (parameter_no) {
+                    const paddedNo = parameter_no.padStart(3, '0');
+                    this.regionData.set(paddedNo, {
+                        parameter_no: paddedNo,
+                        region: region || ''
+                    });
+                }
+            }
+
+            console.log(`Loaded ${this.regionData.size} regions`);
+            return this.regionData;
+        } catch (error) {
+            console.error('Error loading region data:', error);
+            return this.regionData;
+        }
+    }
+
+    /**
+     * パラメータ番号から地域名を取得
+     */
+    getRegionByParameter(parameterNo) {
+        const paddedNo = parameterNo.padStart(3, '0');
+        const regionInfo = this.regionData.get(paddedNo);
+        return regionInfo ? regionInfo.region : null;
     }
 }
 
