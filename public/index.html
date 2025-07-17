@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コンポーネント統合ビュー (最終改善版・SP対応)</title>
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        body { 
+            font-family: var(--font-primary); 
+            margin: 0; 
+            background-color: var(--neutral-light); 
+        }
+        .component-wrapper {
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+        iframe {
+            width: 100%;
+            border: none;
+            display: block;
+            background-color: var(--neutral-white);
+            transition: height var(--transition-base);
+            pointer-events: auto;
+        }
+    </style>
+    
+    <!-- 統一ランキング同期システム -->
+    <script src="clinic-database-generated.js"></script>
+    <script src="region-config-generated.js"></script>
+    
+    <!-- パラメータベースランキングシステム -->
+    <script src="parameter-csv-data-loader.js"></script>
+    <script src="parameter-handler.js"></script>
+    <script src="parameter-ranking-engine.js"></script>
+    <script src="parameter-error-handler.js"></script>
+    
+    <!-- 拡張版ランキング同期システム（既存システムを継承） -->
+    <script src="ranking-sync-system.js"></script>
+    <script src="ranking-sync-system-enhanced.js"></script>
+    <script src="iframe-parameter-handler.js"></script>
+    
+    <script>
+        // 全てのiframe要素を格納する配列
+        const allIframes = [];
+
+        // iframeの高さを更新するコアな関数
+        function updateIframeHeight(iframe) {
+            try {
+                const contentHeight = iframe.contentWindow.document.documentElement.scrollHeight;
+                if (contentHeight > 0 && iframe.style.height !== contentHeight + 'px') {
+                    iframe.style.height = contentHeight + 'px';
+                    console.log(`[${iframe.title}] 高さを更新: ${contentHeight}px`);
+                }
+            } catch (e) {
+                console.error(`[${iframe.title}] 高さの更新中にエラーが発生しました。`, e);
+            }
+        }
+
+        // iframeの初期設定と監視を行う関数
+        function setupIframe(iframe) {
+            console.log(`[${iframe.title}] onloadイベント発生。監視をセットアップします。`);
+            
+            // 全てのiframeをリストに追加
+            allIframes.push(iframe);
+            
+            try {
+                const targetDocument = iframe.contentWindow.document;
+                const targetElement = targetDocument.body;
+
+                // 1. iframe内部のサイズ変更を監視
+                const observer = new ResizeObserver(() => {
+                    updateIframeHeight(iframe);
+                });
+                observer.observe(targetElement);
+
+                // 2. 初期読み込み時の高さを設定
+                updateIframeHeight(iframe);
+
+            } catch (e) {
+                console.error(`[${iframe.title}] 監視のセットアップ中にエラーが発生しました。`, e);
+            }
+        }
+
+        // URLパラメータをiframeに渡す関数
+        function passUrlParametersToIframes() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const regionId = urlParams.get('region_id');
+            const parameterNo = urlParams.get('parameter_no');
+            
+            if (regionId || parameterNo) {
+                console.log('URLパラメータを検出:', { regionId, parameterNo });
+                
+                // 全てのiframeのsrcにパラメータを追加
+                const iframes = document.querySelectorAll('iframe');
+                iframes.forEach(iframe => {
+                    const currentSrc = iframe.src;
+                    let newSrc = currentSrc;
+                    const separator = currentSrc.includes('?') ? '&' : '?';
+                    
+                    if (regionId) {
+                        newSrc = `${newSrc}${separator}region_id=${regionId}`;
+                    }
+                    
+                    if (parameterNo) {
+                        const separator2 = newSrc.includes('?') ? '&' : '?';
+                        newSrc = `${newSrc}${separator2}parameter_no=${parameterNo}`;
+                    }
+                    
+                    iframe.src = newSrc;
+                    console.log(`iframe src更新: ${currentSrc} → ${newSrc}`);
+                });
+            }
+        }
+
+        // 3. 親ウィンドウ（ブラウザ）のサイズ変更を監視
+        window.addEventListener('resize', () => {
+            console.log('--- ウィンドウリサイズ検知 --- 全てのiframeの高さを再計算します ---');
+            // 簡素化のため、少し待ってから全iframeの高さを更新
+            setTimeout(() => {
+                allIframes.forEach(iframe => {
+                    updateIframeHeight(iframe);
+                });
+            }, 300); // 0.3秒待ってから実行
+        });
+
+        // postMessage APIを使ったiframe間通信のハンドラー
+function handleIframeMessage(event) {
+
+    const myOrigin = window.location.origin; // 親ページ自身のオリジンを取得
+
+    // メッセージを許可するオリジン（ドメイン）かを判定します
+    const isAllowedOrigin =
+        // 条件1: 送信元(event.origin)が、このページ(myOrigin)と完全に一致する場合 (例: 本番URL)
+        event.origin === myOrigin ||
+        // 条件2: Vercelのプレビューデプロイ環境を考慮し、両方のドメインが '.vercel.app' で終わる場合
+        (myOrigin.includes('.vercel.app') && event.origin.endsWith('.vercel.app')) ||
+        // 条件3: ローカルファイルとして開いている場合 (オリジンが 'null' または 'file://' になる)
+        event.origin === 'null' || event.origin.startsWith('file://') ||
+        // 条件4: 同一ホスト・同一プロトコルの場合（iframe内外で同じドメイン）
+        (myOrigin.split('://')[1] === event.origin.split('://')[1]) ||
+        // 条件5: Vercel本番環境での iframe 内外通信（緊急対応）
+        (myOrigin.includes('vercel.app') || event.origin.includes('vercel.app'));
+
+    // デバッグ情報の追加
+    console.log('Origin validation:', {
+        myOrigin: myOrigin,
+        eventOrigin: event.origin,
+        isAllowed: isAllowedOrigin
+    });
+
+    // 許可されていないオリジンからのメッセージは、ここで処理を中断します
+    if (!isAllowedOrigin) {
+        console.warn(`[Security] 信頼できないオリジンからのメッセージを拒否しました: ${event.origin}`);
+        console.warn('Message data:', event.data);
+        return;
+    }
+    // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+    // ★★★ 修正・強化されたセキュリティチェックはここまで ★★★
+    // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+
+
+    console.log('Received message from iframe:', event.data);
+
+    // メッセージの構造チェック
+    if (!event.data || typeof event.data !== 'object') {
+        console.warn('Invalid message format:', event.data);
+        return;
+    }
+
+    // ナビゲーション要求の処理
+    if (event.data.type === 'navigate') {
+        const targetUrl = event.data.url;
+        const linkText = event.data.linkText || 'Unknown';
+
+        // URLの検証
+        if (targetUrl && typeof targetUrl === 'string') {
+            console.log(`Navigating to: ${targetUrl} (from link: ${linkText})`);
+
+            // メールリンクの場合はそのまま処理
+            if (targetUrl.startsWith('mailto:')) {
+                window.location.href = targetUrl;
+            }
+            // HTMLファイルまたは相対パスの場合
+            else if (targetUrl.endsWith('.html') || targetUrl === 'index.html' ||
+                (!targetUrl.includes('://') && !targetUrl.startsWith('javascript:'))) {
+                // XSS対策: javascript:プロトコルを拒否
+                window.location.href = targetUrl;
+            }
+            // 外部リンクの場合は新しいタブで開く
+            else if (targetUrl.startsWith('http://') || targetUrl.startsWith('https://')) {
+                window.open(targetUrl, '_blank', 'noopener,noreferrer');
+            } else {
+                console.warn('Blocked potentially unsafe URL:', targetUrl);
+            }
+        } else {
+            console.warn('Invalid URL in navigation request:', targetUrl);
+        }
+    }
+    // リンクホバー効果の処理
+    else if (event.data.type === 'link_hover') {
+        console.log('Link hover effect from iframe:', event.data.linkText, event.data.action);
+    }
+    // デバッグ情報
+    else if (event.data.type === 'debug') {
+        console.log('Debug message from iframe:', event.data.message);
+    }
+}
+
+        // メッセージリスナーを登録
+        window.addEventListener('message', handleIframeMessage, false);
+
+        // ページ読み込み時にURLパラメータをiframeに渡す
+        document.addEventListener('DOMContentLoaded', function() {
+            passUrlParametersToIframes();
+        });
+    </script>
+</head>
+<body>
+
+<!-- Component: 01_Header -->
+<div class="component-wrapper">
+    <iframe src="01_header.html" onload="setupIframe(this)" title="01_Header"></iframe>
+</div>
+
+<!-- Component: 02_MainVisual -->
+<div class="component-wrapper">
+    <iframe src="02_mainvisual.html" onload="setupIframe(this)" title="02_MainVisual"></iframe>
+</div>
+
+<!-- Component: 03_SearchForm -->
+<div class="component-wrapper">
+    <iframe src="03_searchform.html" onload="setupIframe(this)" title="03_SearchForm"></iframe>
+</div>
+
+<!-- Component: 04_RankingResults -->
+<div class="component-wrapper">
+    <iframe src="04_rankingresults.html" onload="setupIframe(this)" title="04_RankingResults"></iframe>
+</div>
+
+<!-- Component: 06_ComparisonTable -->
+<div class="component-wrapper">
+    <iframe src="06_comparisontable.html" onload="setupIframe(this)" title="06_ComparisonTable"></iframe>
+</div>
+
+<!-- Component: 07_DetailedContent -->
+<div class="component-wrapper">
+    <iframe src="07_detailedcontent.html" onload="setupIframe(this)" title="07_DetailedContent"></iframe>
+</div>
+
+<!-- Component: 08_Columns -->
+<div class="component-wrapper">
+    <iframe src="08_columns.html" onload="setupIframe(this)" title="08_Columns"></iframe>
+</div>
+
+<!-- Component: 09_Footer -->
+<div class="component-wrapper">
+    <iframe src="09_footer_debug.html" onload="setupIframe(this)" title="09_Footer"></iframe>
+</div>
+</body></html>

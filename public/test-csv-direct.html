@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV直接読み込みテスト</title>
+</head>
+<body>
+    <h1>CSV直接読み込みテスト</h1>
+    <div id="result"></div>
+
+    <script>
+        // 直接CSVファイルを読み込むテスト
+        async function testDirectLoad() {
+            const result = document.getElementById('result');
+            
+            // 複数のエンコーディング方式を試す
+            const fileVariations = [
+                'data2/出しわけSS - items.csv',
+                encodeURI('data2/出しわけSS - items.csv'),
+                'data2/%E5%87%BA%E3%81%97%E3%82%8F%E3%81%91SS%20-%20items.csv',
+                'data2/出しわけSS%20-%20items.csv'
+            ];
+            
+            for (const file of fileVariations) {
+                try {
+                    console.log('Trying:', file);
+                    const response = await fetch(file);
+                    const text = await response.text();
+                    
+                    result.innerHTML += `
+                        <div style="background: lightgreen; padding: 10px; margin: 5px;">
+                            <strong>成功!</strong><br>
+                            URL: ${file}<br>
+                            Status: ${response.status}<br>
+                            Content: ${text.substring(0, 100)}...
+                        </div>
+                    `;
+                    
+                    // 成功したらパラメータシステムをテスト
+                    await testParameterSystem();
+                    break;
+                    
+                } catch (error) {
+                    result.innerHTML += `
+                        <div style="background: lightcoral; padding: 10px; margin: 5px;">
+                            <strong>失敗</strong><br>
+                            URL: ${file}<br>
+                            Error: ${error.message}
+                        </div>
+                    `;
+                }
+            }
+        }
+        
+        async function testParameterSystem() {
+            // パラメータシステムのスクリプトを動的に読み込む
+            const scripts = [
+                'parameter-csv-data-loader.js',
+                'parameter-handler.js',
+                'parameter-ranking-engine.js',
+                'parameter-error-handler.js'
+            ];
+            
+            for (const script of scripts) {
+                try {
+                    await loadScript(script);
+                    console.log('Loaded:', script);
+                } catch (error) {
+                    console.error('Failed to load:', script, error);
+                }
+            }
+            
+            // データローダーをテスト
+            setTimeout(async () => {
+                try {
+                    const loader = new window.ParameterCSVDataLoader();
+                    const data = await loader.loadAllData();
+                    console.log('Data loaded successfully:', data);
+                    
+                    const result = document.getElementById('result');
+                    result.innerHTML += `
+                        <div style="background: lightblue; padding: 10px; margin: 5px;">
+                            <strong>パラメータシステム成功!</strong><br>
+                            Clinics: ${data.clinics.size}<br>
+                            Rankings: ${data.rankings.size}<br>
+                            Regions: ${data.regions.size}
+                        </div>
+                    `;
+                } catch (error) {
+                    console.error('Parameter system error:', error);
+                }
+            }, 1000);
+        }
+        
+        function loadScript(src) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = resolve;
+                script.onerror = reject;
+                document.body.appendChild(script);
+            });
+        }
+        
+        // テスト実行
+        testDirectLoad();
+    </script>
+</body>
+</html>

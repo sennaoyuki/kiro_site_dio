@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【2024年版】<span data-region="name">千葉</span>の医療脱毛クリニックおすすめ人気ランキングTOP3</title>
+    <meta name="description" content="本気でムダ毛をなくしたい方必見！医師監修による信頼できる医療脱毛クリニック比較サイト。レーザー脱毛・IPL脱毛・ニードル脱毛で理想の肌を実現。無料カウンセリング情報も充実。">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+        }
+
+        .header {
+            background-color: var(--neutral-white);
+            padding: var(--space-3) var(--space-4);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--neutral-medium);
+            position: relative;
+            box-shadow: var(--shadow-sm);
+            flex-wrap: wrap;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neutral-white);
+            font-size: var(--text-sm);
+            font-weight: bold;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-base);
+        }
+
+        .logo-icon:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+
+        .site-title {
+            color: var(--primary-red);
+            font-size: var(--text-lg);
+            font-weight: 700;
+            text-decoration: none;
+            transition: color var(--transition-base);
+        }
+
+        .site-title:hover {
+            color: var(--primary-red-dark);
+        }
+
+        .nav-text {
+            color: var(--neutral-text-light);
+            font-size: var(--text-sm);
+            text-align: right;
+            line-height: var(--leading-normal);
+            font-weight: 500;
+        }
+
+        /* Search Integration Styles */
+        .header-search {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-left: auto;
+        }
+
+        .search-toggle {
+            background: var(--primary-red);
+            color: var(--neutral-white);
+            border: none;
+            padding: var(--space-2);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: none;
+        }
+
+        .search-toggle:hover {
+            background: var(--primary-red-dark);
+            transform: scale(1.05);
+        }
+
+        .search-form-inline {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            background: var(--neutral-light);
+            padding: var(--space-2);
+            border-radius: var(--radius-lg);
+            border: 2px solid transparent;
+            transition: all var(--transition-base);
+        }
+
+        .search-form-inline:focus-within {
+            border-color: var(--primary-red);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+
+        .search-select-compact {
+            border: none;
+            background: transparent;
+            font-size: var(--text-xs);
+            padding: var(--space-1);
+            cursor: pointer;
+            min-width: 80px;
+            font-family: var(--font-primary);
+        }
+
+        .search-select-compact:focus {
+            outline: none;
+        }
+
+        .search-btn-compact {
+            background: var(--primary-red);
+            color: var(--neutral-white);
+            border: none;
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-md);
+            font-size: var(--text-xs);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+        }
+
+        .search-btn-compact:hover {
+            background: var(--primary-red-dark);
+            transform: translateY(-1px);
+        }
+
+        .search-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--neutral-white);
+            border: 2px solid var(--neutral-medium);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            min-width: 300px;
+            display: none;
+        }
+
+        .search-dropdown.active {
+            display: block;
+            animation: slideDown var(--transition-base) ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-3);
+            margin-bottom: var(--space-3);
+        }
+
+        .dropdown-select {
+            width: 100%;
+            padding: var(--space-2);
+            border: 1px solid var(--neutral-medium);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            font-family: var(--font-primary);
+        }
+
+        .dropdown-btn {
+            background: var(--primary-red);
+            color: var(--neutral-white);
+            border: none;
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all var(--transition-base);
+        }
+
+        .dropdown-btn:hover {
+            background: var(--primary-red-dark);
+        }
+
+        @media (min-width: 768px) {
+            .header {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: var(--space-4) var(--space-6);
+            }
+
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+                font-size: var(--text-base);
+            }
+
+            .site-title {
+                font-size: var(--text-xl);
+            }
+
+            .nav-text {
+                font-size: var(--text-base);
+                margin-right: var(--space-4);
+            }
+
+            .search-form-inline {
+                display: flex;
+            }
+
+            .search-toggle {
+                display: none;
+            }
+
+            .header-search {
+                margin-left: var(--space-4);
+            }
+        }
+
+        @media (max-width: 767px) {
+            .header {
+                padding: var(--space-3);
+                flex-direction: column;
+                gap: var(--space-3);
+            }
+            
+            .header-top {
+                display: flex;
+                width: 100%;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .logo-section {
+                gap: var(--space-2);
+            }
+            
+            .logo-icon {
+                width: 28px;
+                height: 28px;
+            }
+            
+            .site-title {
+                font-size: var(--text-base);
+            }
+            
+            .nav-text {
+                display: none;
+            }
+            
+            .search-form-inline {
+                display: none;
+            }
+            
+            .search-toggle {
+                display: flex;
+                align-items: center;
+                gap: var(--space-1);
+            }
+            
+            .search-dropdown {
+                position: relative;
+                top: 0;
+                right: 0;
+                width: 100%;
+                margin-top: var(--space-2);
+            }
+            
+            .dropdown-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    
+    <!-- 地域データハンドラー -->
+    <script src="region-config-enhanced.js"></script>
+    <script src="region-handler-enhanced.js"></script>
+    <script src="clinic-database.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="header-top">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-spa"></i>
+                </div>
+                <a href="#" class="site-title">医療脱毛クリニック比較ナビ</a>
+            </div>
+            <div class="header-search">
+                <!-- Desktop Search Form -->
+                <div class="search-form-inline">
+                    <select class="search-select-compact" id="area-select">
+                        <option>地域</option>
+                        <option>東京都</option>
+                        <option>大阪府</option>
+                        <option>愛知県</option>
+                        <option>神奈川県</option>
+                    </select>
+                    <select class="search-select-compact" id="method-select">
+                        <option>脱毛方法</option>
+                        <option>レーザー脱毛</option>
+                        <option>IPL脱毛</option>
+                        <option>ニードル脱毛</option>
+                    </select>
+                    <button class="search-btn-compact" type="button" onclick="performSearch()">
+                        <i class="fas fa-search"></i>
+                        検索
+                    </button>
+                </div>
+                
+                <!-- Mobile Search Toggle -->
+                <button class="search-toggle" type="button" onclick="toggleMobileSearch()">
+                    <i class="fas fa-search"></i>
+                    検索
+                </button>
+            </div>
+        </div>
+        <div class="nav-text">
+            信頼できる医療脱毛クリニックを探す<br>
+            なら 医療脱毛クリニック比較ナビ
+        </div>
+        
+        <!-- Mobile Search Dropdown -->
+        <div class="search-dropdown" id="mobile-search">
+            <div class="dropdown-grid">
+                <select class="dropdown-select">
+                    <option>脱毛部位</option>
+                    <option>顔脱毛</option>
+                    <option>ワキ脱毛</option>
+                    <option>脚脱毛</option>
+                    <option>全身脱毛</option>
+                </select>
+                <select class="dropdown-select">
+                    <option>都道府県</option>
+                    <option>東京都</option>
+                    <option>大阪府</option>
+                    <option>愛知県</option>
+                    <option>神奈川県</option>
+                </select>
+                <select class="dropdown-select">
+                    <option>脱毛方法</option>
+                    <option>レーザー脱毛</option>
+                    <option>IPL脱毛</option>
+                    <option>ニードル脱毛</option>
+                </select>
+                <select class="dropdown-select">
+                    <option>予算</option>
+                    <option>～5万円</option>
+                    <option>～10万円</option>
+                    <option>～20万円</option>
+                    <option>20万円以上</option>
+                </select>
+            </div>
+            <button class="dropdown-btn" type="button" onclick="performMobileSearch()">
+                <i class="fas fa-search"></i>
+                無料カウンセリングを探す
+            </button>
+        </div>
+    </header>
+
+    <script>
+        // 地域データの初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('=== Header: 地域データ初期化開始 ===');
+            
+            if (typeof REGION_CONFIG_ENHANCED !== 'undefined') {
+                const regionId = REGION_CONFIG_ENHANCED.getRegionIdFromUrl() || REGION_CONFIG_ENHANCED.defaultRegionId;
+                const regionName = REGION_CONFIG_ENHANCED.getRegionNameById(regionId);
+                
+                console.log('Header: 地域ID =', regionId, '地域名 =', regionName);
+                
+                // 地域名を更新
+                const regionElements = document.querySelectorAll('[data-region="name"]');
+                console.log('Header: 地域名要素数 =', regionElements.length);
+                
+                regionElements.forEach((element, index) => {
+                    console.log(`Header: 地域名要素${index}を更新: ${element.textContent} → ${regionName}`);
+                    element.textContent = regionName;
+                });
+                
+                // ページタイトルを更新
+                document.title = `【2024年版】${regionName}の医療脱毛クリニックおすすめ人気ランキングTOP3`;
+                
+                console.log('Header: 地域データ更新完了');
+            } else {
+                console.error('Header: REGION_CONFIG_ENHANCEDが読み込まれていません');
+            }
+        });
+
+        // Search functionality
+        function toggleMobileSearch() {
+            const dropdown = document.getElementById('mobile-search');
+            dropdown.classList.toggle('active');
+        }
+
+        function performSearch() {
+            const area = document.getElementById('area-select').value;
+            const method = document.getElementById('method-select').value;
+            
+            console.log('デスクトップ検索実行:', { area, method });
+            
+            // シミュレーション: 検索結果にスクロール
+            if (window.parent) {
+                window.parent.postMessage({
+                    type: 'navigate',
+                    url: '#ranking-results',
+                    search: { area, method }
+                }, '*');
+            }
+        }
+
+        function performMobileSearch() {
+            const selects = document.querySelectorAll('.search-dropdown select');
+            const searchData = {};
+            
+            selects.forEach((select, index) => {
+                const keys = ['part', 'area', 'method', 'budget'];
+                searchData[keys[index]] = select.value;
+            });
+            
+            console.log('モバイル検索実行:', searchData);
+            
+            // ドロップダウンを閉じる
+            document.getElementById('mobile-search').classList.remove('active');
+            
+            // 検索結果にスクロール
+            if (window.parent) {
+                window.parent.postMessage({
+                    type: 'navigate',
+                    url: '#ranking-results',
+                    search: searchData
+                }, '*');
+            }
+        }
+
+        // クリック外でドロップダウンを閉じる
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('mobile-search');
+            const toggle = document.querySelector('.search-toggle');
+            
+            if (!dropdown.contains(event.target) && !toggle.contains(event.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

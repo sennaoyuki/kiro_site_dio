@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Region 004 (宮城) Ranking Test</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; background: #f9f9f9; }
+        .ranking-result { margin: 10px 0; padding: 10px; background: #fff; border-left: 4px solid #e74c3c; }
+        button { margin: 5px; padding: 10px; background: #e74c3c; color: white; border: none; cursor: pointer; }
+        .log { background: #000; color: #0f0; padding: 10px; font-family: monospace; height: 200px; overflow-y: scroll; margin-top: 10px; }
+        iframe { width: 100%; height: 300px; border: 1px solid #ccc; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Region 004 (宮城) ランキングテスト</h1>
+    
+    <div class="test-section">
+        <h2>地域変更コントロール</h2>
+        <button onclick="changeToRegion004()">宮城（004）に変更</button>
+        <button onclick="changeToRegion012()">千葉（012）に戻す</button>
+        <button onclick="showCurrentRanking()">現在のランキング表示</button>
+    </div>
+
+    <div class="test-section">
+        <h2>予想される宮城のランキング結果</h2>
+        <div class="ranking-result">
+            <strong>1位:</strong> TCB東京中央美容外科 仙台院 (月々1,700円)
+        </div>
+        <div class="ranking-result">
+            <strong>2位:</strong> リゼクリニック 仙台院 (月々3,700円)
+        </div>
+        <div class="ranking-result">
+            <strong>3位:</strong> エミナルクリニック (データベースに3位情報なし)
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>04_rankingresults.html テスト</h2>
+        <iframe src="04_rankingresults.html" id="rankingIframe"></iframe>
+    </div>
+
+    <div class="test-section">
+        <h2>06_comparisontable.html テスト</h2>
+        <iframe src="06_comparisontable.html" id="comparisonIframe"></iframe>
+    </div>
+
+    <div class="test-section">
+        <h2>ログ</h2>
+        <div id="log" class="log"></div>
+    </div>
+
+    <!-- システムの読み込み -->
+    <script src="clinic-database-generated.js"></script>
+    <script src="ranking-sync-system.js"></script>
+
+    <script>
+        // ログ表示関数
+        function logMessage(message) {
+            const logDiv = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${time}] ${message}\n`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        // コンソールをログに転送
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            logMessage(args.join(' '));
+        };
+
+        const originalWarn = console.warn;
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            logMessage('⚠️ ' + args.join(' '));
+        };
+
+        // 地域変更関数
+        function changeToRegion004() {
+            logMessage('🔄 宮城（004）に変更中...');
+            
+            if (window.rankingSyncSystem) {
+                window.rankingSyncSystem.updateRegion('004');
+                
+                // iframeにも地域変更を通知
+                const rankingIframe = document.getElementById('rankingIframe');
+                const comparisonIframe = document.getElementById('comparisonIframe');
+                
+                if (rankingIframe.contentWindow && rankingIframe.contentWindow.rankingSyncSystem) {
+                    rankingIframe.contentWindow.rankingSyncSystem.updateRegion('004');
+                }
+                
+                if (comparisonIframe.contentWindow && comparisonIframe.contentWindow.rankingSyncSystem) {
+                    comparisonIframe.contentWindow.rankingSyncSystem.updateRegion('004');
+                }
+                
+                logMessage('✅ 宮城（004）に変更完了');
+            } else {
+                logMessage('❌ ranking-sync-system not available');
+            }
+        }
+
+        function changeToRegion012() {
+            logMessage('🔄 千葉（012）に戻し中...');
+            
+            if (window.rankingSyncSystem) {
+                window.rankingSyncSystem.updateRegion('012');
+                
+                // iframeにも地域変更を通知
+                const rankingIframe = document.getElementById('rankingIframe');
+                const comparisonIframe = document.getElementById('comparisonIframe');
+                
+                if (rankingIframe.contentWindow && rankingIframe.contentWindow.rankingSyncSystem) {
+                    rankingIframe.contentWindow.rankingSyncSystem.updateRegion('012');
+                }
+                
+                if (comparisonIframe.contentWindow && comparisonIframe.contentWindow.rankingSyncSystem) {
+                    comparisonIframe.contentWindow.rankingSyncSystem.updateRegion('012');
+                }
+                
+                logMessage('✅ 千葉（012）に戻し完了');
+            }
+        }
+
+        function showCurrentRanking() {
+            if (window.rankingSyncSystem) {
+                window.rankingSyncSystem.logCurrentRanking();
+            }
+        }
+
+        // iframe読み込み完了時
+        document.getElementById('rankingIframe').addEventListener('load', function() {
+            logMessage('✅ 04_rankingresults.html loaded');
+        });
+
+        document.getElementById('comparisonIframe').addEventListener('load', function() {
+            logMessage('✅ 06_comparisontable.html loaded');
+        });
+
+        logMessage('🚀 Region 004 test page initialized');
+    </script>
+</body>
+</html>

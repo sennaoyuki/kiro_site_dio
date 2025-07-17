@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>医療脱毛で後悔しない選択を。専門家が厳選した<span data-region="name">千葉</span>の人気脱毛クリニックBEST3</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="design-system.css">
+    
+    <!-- 地域データハンドラー -->
+    <script src="region-config-enhanced.js"></script>
+    <script src="region-handler-enhanced.js"></script>
+    <script src="clinic-database.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+        }
+
+        .main-visual {
+            background: linear-gradient(135deg, var(--neutral-light) 0%, #ffe8e0 100%);
+            padding: var(--space-6) var(--space-4);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--neutral-medium);
+        }
+
+        .visual-content {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-4);
+        }
+
+        .person-image {
+            width: 120px;
+            height: 120px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect width="120" height="120" fill="%23e74c3c" opacity="0.1"/><circle cx="60" cy="45" r="15" fill="%23e74c3c" opacity="0.7"/><ellipse cx="60" cy="85" rx="25" ry="20" fill="%23e74c3c" opacity="0.7"/><text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="%23e74c3c" font-size="12">ツル肌</text></svg>') no-repeat center;
+            background-size: cover;
+            border-radius: var(--radius-lg);
+            flex-shrink: 0;
+            box-shadow: var(--shadow-lg);
+            transition: all var(--transition-base);
+        }
+
+        .person-image:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .content-section {
+            flex: 1;
+            margin-left: var(--space-4);
+            text-align: left;
+        }
+
+        .badge {
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+            color: var(--neutral-white);
+            padding: var(--space-3) var(--space-5);
+            border-radius: var(--radius-xl);
+            font-size: var(--text-sm);
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: var(--space-4);
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-base);
+        }
+
+        .badge:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .main-text {
+            color: var(--neutral-dark);
+            font-size: var(--text-lg);
+            font-weight: 700;
+            line-height: var(--leading-tight);
+            margin-bottom: var(--space-3);
+        }
+
+        .sub-text {
+            color: var(--neutral-text-light);
+            font-size: var(--text-sm);
+            line-height: var(--leading-normal);
+            font-weight: 500;
+        }
+
+        .medical-icon {
+            width: 100px;
+            height: 100px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><circle cx="40" cy="40" r="35" fill="%23e74c3c" opacity="0.1"/><path d="M35 25h10v30h-10z" fill="%23e74c3c" opacity="0.6"/><path d="M25 35h30v10h-30z" fill="%23e74c3c" opacity="0.6"/></svg>') no-repeat center;
+            background-size: cover;
+            position: absolute;
+            right: var(--space-3);
+            top: var(--space-3);
+            opacity: 0.3;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @media (min-width: 768px) {
+            .main-visual {
+                padding: var(--space-12) var(--space-6);
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .visual-content {
+                max-width: 800px;
+                gap: var(--space-6);
+            }
+
+            .person-image {
+                width: 180px;
+                height: 180px;
+            }
+
+            .content-section {
+                margin-left: var(--space-6);
+            }
+
+            .badge {
+                font-size: var(--text-base);
+                padding: var(--space-4) var(--space-6);
+            }
+
+            .main-text {
+                font-size: var(--text-2xl);
+            }
+
+            .sub-text {
+                font-size: var(--text-base);
+            }
+
+            .medical-icon {
+                width: 120px;
+                height: 120px;
+                right: var(--space-6);
+                top: var(--space-6);
+            }
+        }
+
+        @media (max-width: 767px) {
+            .main-visual {
+                padding: var(--space-5) var(--space-3);
+            }
+            
+            .visual-content {
+                max-width: 100%;
+                gap: var(--space-3);
+            }
+            
+            .person-image {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .content-section {
+                margin-left: var(--space-3);
+            }
+            
+            .badge {
+                font-size: var(--text-xs);
+                padding: var(--space-2) var(--space-4);
+            }
+            
+            .main-text {
+                font-size: var(--text-base);
+            }
+            
+            .sub-text {
+                font-size: var(--text-xs);
+            }
+            
+            .medical-icon {
+                width: 80px;
+                height: 80px;
+                right: var(--space-2);
+                top: var(--space-2);
+            }
+        }
+        
+        /* 地域選択UIを非表示 */
+        .region-selector,
+        .area-selector,
+        .location-selector,
+        [class*="region-select"],
+        [class*="area-select"],
+        [class*="location-select"],
+        .region-dropdown,
+        .area-dropdown {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <section class="main-visual">
+        <div class="visual-content">
+            <div class="person-image"></div>
+            <div class="content-section">
+                <div class="badge">医療脱毛</div>
+                <div class="main-text">専門家が選ぶ<span data-region="name">千葉</span>の信頼できる人気3選</div>
+                <div class="sub-text">※当サイトはプロモーションを含んでいます</div>
+            </div>
+            <div class="medical-icon"></div>
+        </div>
+    </section>
+
+    <script>
+        // 地域データの初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('=== MainVisual: 地域データ初期化開始 ===');
+            
+            if (typeof REGION_CONFIG_ENHANCED !== 'undefined') {
+                const regionId = REGION_CONFIG_ENHANCED.getRegionIdFromUrl() || REGION_CONFIG_ENHANCED.defaultRegionId;
+                const regionName = REGION_CONFIG_ENHANCED.getRegionNameById(regionId);
+                
+                console.log('MainVisual: 地域ID =', regionId, '地域名 =', regionName);
+                
+                // 地域名を更新
+                const regionElements = document.querySelectorAll('[data-region="name"]');
+                console.log('MainVisual: 地域名要素数 =', regionElements.length);
+                
+                regionElements.forEach((element, index) => {
+                    console.log(`MainVisual: 地域名要素${index}を更新: ${element.textContent} → ${regionName}`);
+                    element.textContent = regionName;
+                });
+                
+                // ページタイトルを更新
+                document.title = `医療脱毛で後悔しない選択を。専門家が厳選した${regionName}の人気脱毛クリニックBEST3`;
+                
+                console.log('MainVisual: 地域データ更新完了');
+            } else {
+                console.error('MainVisual: REGION_CONFIG_ENHANCEDが読み込まれていません');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>パラメータランキングシステム テストページ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .control-panel {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .parameter-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        input[type="number"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100px;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .quick-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .quick-link {
+            padding: 5px 10px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+        .quick-link:hover {
+            background-color: #5a6268;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .ranking-display {
+            margin-top: 20px;
+        }
+        .clinic-card {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        .clinic-rank {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            margin-right: 10px;
+        }
+        .clinic-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        .clinic-info {
+            color: #666;
+            margin-top: 5px;
+        }
+        .store-list {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+        .store-item {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+        }
+        .debug-panel {
+            background-color: #f0f0f0;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .mode-indicator {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .mode-indicator.parameter {
+            background-color: #28a745;
+            color: white;
+        }
+        .mode-indicator.region {
+            background-color: #17a2b8;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>パラメータランキングシステム テストページ</h1>
+        
+        <div class="control-panel">
+            <h2>コントロールパネル</h2>
+            
+            <div class="parameter-input">
+                <label for="parameterNo">パラメータ番号 (1-63):</label>
+                <input type="number" id="parameterNo" min="1" max="63" value="1">
+                <button onclick="changeParameter()">変更</button>
+                <button onclick="randomParameter()">ランダム</button>
+                <span class="mode-indicator" id="modeIndicator">-</span>
+            </div>
+            
+            <div class="quick-links">
+                <span>クイックアクセス:</span>
+                <a href="#" class="quick-link" onclick="setParameter(1); return false;">001</a>
+                <a href="#" class="quick-link" onclick="setParameter(10); return false;">010</a>
+                <a href="#" class="quick-link" onclick="setParameter(20); return false;">020</a>
+                <a href="#" class="quick-link" onclick="setParameter(30); return false;">030</a>
+                <a href="#" class="quick-link" onclick="setParameter(40); return false;">040</a>
+                <a href="#" class="quick-link" onclick="setParameter(50); return false;">050</a>
+                <a href="#" class="quick-link" onclick="setParameter(63); return false;">063</a>
+            </div>
+            
+            <div style="margin-top: 15px;">
+                <button onclick="testDataLoading()">データ読み込みテスト</button>
+                <button onclick="testInvalidParameter()">無効パラメータテスト</button>
+                <button onclick="switchToRegionMode()">地域モードに切替</button>
+                <button onclick="showDebugInfo()">デバッグ情報</button>
+            </div>
+        </div>
+        
+        <div id="status"></div>
+        
+        <div class="ranking-display" id="rankingDisplay">
+            <h2>ランキング表示</h2>
+            <div id="rankingContent">データを読み込んでください...</div>
+        </div>
+        
+        <div class="debug-panel" id="debugPanel" style="display: none;">
+            <h3>デバッグ情報</h3>
+            <pre id="debugContent"></pre>
+        </div>
+    </div>
+
+    <!-- 必要なスクリプトの読み込み -->
+    <script src="parameter-csv-data-loader.js"></script>
+    <script src="parameter-handler.js"></script>
+    <script src="parameter-ranking-engine.js"></script>
+    <script src="parameter-error-handler.js"></script>
+    
+    <script>
+        let dataLoader;
+        let parameterHandler;
+        let rankingEngine;
+        let currentData;
+
+        // 初期化
+        async function init() {
+            showStatus('システムを初期化中...', 'info');
+            
+            try {
+                // データローダーの初期化
+                dataLoader = new ParameterCSVDataLoader();
+                const csvData = await dataLoader.loadAllData();
+                
+                // ランキングエンジンの初期化
+                rankingEngine = new ParameterRankingEngine(csvData);
+                
+                // パラメータハンドラーの初期化
+                parameterHandler = new ParameterHandler();
+                parameterHandler.init();
+                
+                // URLパラメータから初期値を設定
+                const urlParams = new URLSearchParams(window.location.search);
+                const paramNo = urlParams.get('parameter_no');
+                if (paramNo) {
+                    document.getElementById('parameterNo').value = parseInt(paramNo);
+                }
+                
+                showStatus('システムの初期化が完了しました', 'success');
+                
+                // 初期データの読み込み
+                changeParameter();
+                
+                // モード表示を更新
+                updateModeIndicator();
+                
+            } catch (error) {
+                showStatus('初期化エラー: ' + error.message, 'error');
+                console.error('Initialization error:', error);
+            }
+        }
+
+        // パラメータ変更
+        function changeParameter() {
+            const paramNo = document.getElementById('parameterNo').value;
+            setParameter(paramNo);
+        }
+
+        // パラメータ設定
+        function setParameter(paramNo) {
+            document.getElementById('parameterNo').value = paramNo;
+            const paddedNo = String(paramNo).padStart(3, '0');
+            
+            try {
+                // パラメータハンドラーで変更
+                if (parameterHandler) {
+                    parameterHandler.changeParameter(paddedNo);
+                }
+                
+                // ランキングデータを生成
+                currentData = rankingEngine.generateRankingForParameter(paddedNo);
+                
+                // 表示を更新
+                displayRanking(currentData);
+                showStatus(`パラメータ ${paddedNo} のランキングを表示しました`, 'success');
+                
+                updateModeIndicator();
+                
+            } catch (error) {
+                showStatus('パラメータ変更エラー: ' + error.message, 'error');
+                console.error('Parameter change error:', error);
+            }
+        }
+
+        // ランダムパラメータ
+        function randomParameter() {
+            const randomNo = Math.floor(Math.random() * 63) + 1;
+            setParameter(randomNo);
+        }
+
+        // ランキング表示
+        function displayRanking(data) {
+            const content = document.getElementById('rankingContent');
+            
+            if (!data || !data.clinics || data.clinics.length === 0) {
+                content.innerHTML = '<p>ランキングデータがありません</p>';
+                return;
+            }
+            
+            let html = `<h3>パラメータ番号: ${data.parameter_no}</h3>`;
+            html += `<p>地域: ${data.region || '不明'}</p>`;
+            html += `<p>クリニック数: ${data.totalClinics}</p>`;
+            
+            data.clinics.forEach(clinic => {
+                html += `
+                    <div class="clinic-card">
+                        <span class="clinic-rank">#${clinic.rank}</span>
+                        <span class="clinic-name">${clinic.clinic_name}</span>
+                        <div class="clinic-info">
+                            ID: ${clinic.clinic_id} | コード: ${clinic.code}
+                        </div>
+                        ${clinic.stores && clinic.stores.length > 0 ? `
+                            <div class="store-list">
+                                <strong>店舗情報:</strong>
+                                ${clinic.stores.map(store => `
+                                    <div class="store-item">
+                                        ${store.store_name} - ${store.address} (${store.access})
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : '<div class="store-list"><em>店舗情報なし</em></div>'}
+                    </div>
+                `;
+            });
+            
+            content.innerHTML = html;
+        }
+
+        // ステータス表示
+        function showStatus(message, type = 'info') {
+            const statusEl = document.getElementById('status');
+            statusEl.className = `status ${type}`;
+            statusEl.textContent = message;
+            
+            // 成功メッセージは3秒後に消す
+            if (type === 'success') {
+                setTimeout(() => {
+                    statusEl.style.display = 'none';
+                }, 3000);
+            } else {
+                statusEl.style.display = 'block';
+            }
+        }
+
+        // データ読み込みテスト
+        async function testDataLoading() {
+            showStatus('データ読み込みテストを実行中...', 'info');
+            
+            try {
+                const testLoader = new ParameterCSVDataLoader();
+                const data = await testLoader.loadAllData();
+                
+                const stats = {
+                    clinics: data.clinics.size,
+                    rankings: data.rankings.size,
+                    stores: data.stores.size
+                };
+                
+                showStatus(`データ読み込み成功: クリニック${stats.clinics}件, ランキング${stats.rankings}件, 店舗${stats.stores}件`, 'success');
+                console.log('Loaded data:', data);
+                
+            } catch (error) {
+                showStatus('データ読み込みテスト失敗: ' + error.message, 'error');
+            }
+        }
+
+        // 無効パラメータテスト
+        function testInvalidParameter() {
+            showStatus('無効パラメータテストを実行中...', 'info');
+            
+            // 範囲外のパラメータ
+            const invalidParams = ['0', '64', '999', 'abc', '', null];
+            
+            invalidParams.forEach(param => {
+                const isValid = parameterHandler.validateParameterNo(param);
+                console.log(`Parameter "${param}" is valid: ${isValid}`);
+            });
+            
+            // エラーハンドリングのテスト
+            try {
+                const result = rankingEngine.generateRankingForParameter('999');
+                showStatus('無効パラメータでもデフォルトランキングが返されました', 'success');
+                displayRanking(result);
+            } catch (error) {
+                showStatus('無効パラメータテストでエラー: ' + error.message, 'error');
+            }
+        }
+
+        // 地域モードへの切り替え
+        function switchToRegionMode() {
+            window.location.href = 'index.html?region_id=012';
+        }
+
+        // デバッグ情報表示
+        function showDebugInfo() {
+            const debugPanel = document.getElementById('debugPanel');
+            const debugContent = document.getElementById('debugContent');
+            
+            const debugInfo = {
+                currentParameter: parameterHandler ? parameterHandler.getCurrentParameterNo() : 'N/A',
+                availableParameters: rankingEngine ? rankingEngine.getAvailableParameters().slice(0, 10) + '...' : 'N/A',
+                statistics: rankingEngine ? rankingEngine.getStatistics() : {},
+                currentData: currentData ? {
+                    parameter_no: currentData.parameter_no,
+                    region: currentData.region,
+                    clinicCount: currentData.totalClinics,
+                    clinics: currentData.clinics.map(c => `${c.rank}. ${c.clinic_name}`)
+                } : 'No data',
+                errorStats: window.parameterErrorHandler ? window.parameterErrorHandler.getErrorStats() : {}
+            };
+            
+            debugContent.textContent = JSON.stringify(debugInfo, null, 2);
+            debugPanel.style.display = debugPanel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // モード表示を更新
+        function updateModeIndicator() {
+            const indicator = document.getElementById('modeIndicator');
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (urlParams.has('parameter_no')) {
+                indicator.textContent = 'パラメータモード';
+                indicator.className = 'mode-indicator parameter';
+            } else {
+                indicator.textContent = '地域モード';
+                indicator.className = 'mode-indicator region';
+            }
+        }
+
+        // ページ読み込み時に初期化
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

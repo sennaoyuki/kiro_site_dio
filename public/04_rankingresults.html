@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【医師監修】信頼できる医療脱毛クリニック総合ランキング</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--neutral-light);
+        }
+
+        .ranking-container {
+            padding: var(--space-4);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .ranking-header {
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+            color: var(--neutral-white);
+            text-align: center;
+            padding: var(--space-6);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+            position: relative;
+            margin-bottom: var(--space-6);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .ranking-header::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 18px solid transparent;
+            border-right: 18px solid transparent;
+            border-top: 12px solid var(--primary-red-dark);
+        }
+
+        .ranking-header h2 {
+            font-size: var(--text-xl);
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .ranking-card {
+            background-color: var(--neutral-white);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-6);
+            overflow: hidden;
+            position: relative;
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-base);
+            border: 2px solid transparent;
+        }
+        
+        .ranking-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-red-light);
+        }
+
+        .ranking-badge {
+            position: absolute;
+            top: -8px;
+            left: var(--space-5);
+            background: linear-gradient(135deg, var(--secondary-gold) 0%, var(--secondary-gold-dark) 100%);
+            color: var(--neutral-dark);
+            padding: var(--space-3) var(--space-5);
+            border-radius: var(--radius-xl);
+            font-size: var(--text-sm);
+            font-weight: 700;
+            z-index: 10;
+            box-shadow: var(--shadow-lg);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .clinic-name {
+            background-color: var(--neutral-dark);
+            color: var(--neutral-white);
+            padding: var(--space-4) var(--space-5);
+            font-size: var(--text-lg);
+            font-weight: 700;
+        }
+
+        .card-content {
+            background-color: var(--neutral-white);
+            padding: 0;
+        }
+
+        .clinic-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .price-overlay {
+            position: absolute;
+            bottom: var(--space-4);
+            left: var(--space-4);
+            background-color: rgba(231, 76, 60, 0.95);
+            color: var(--neutral-white);
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius-md);
+            backdrop-filter: blur(4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .price-large {
+            font-size: var(--text-2xl);
+            font-weight: 700;
+            color: var(--neutral-white);
+        }
+
+        .price-small {
+            font-size: var(--text-xs);
+            margin-top: var(--space-1);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0;
+            border-bottom: 1px solid var(--neutral-medium);
+        }
+
+        .feature-item {
+            padding: var(--space-4) var(--space-3);
+            text-align: center;
+            border-right: 1px solid var(--neutral-medium);
+            background-color: var(--neutral-light);
+            transition: all var(--transition-base);
+        }
+        
+        .feature-item:hover {
+            background-color: var(--primary-red-light);
+            color: var(--neutral-white);
+        }
+
+        .feature-item:last-child {
+            border-right: none;
+        }
+
+        .feature-title {
+            font-size: var(--text-xs);
+            color: var(--neutral-text-light);
+            margin-bottom: var(--space-2);
+            font-weight: 600;
+        }
+
+        .feature-icon {
+            width: 32px;
+            height: 32px;
+            margin: 0 auto var(--space-2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-sm);
+            color: var(--neutral-white);
+            transition: all var(--transition-base);
+        }
+
+        .feature-icon.excellent {
+            background-color: var(--primary-red);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .feature-icon.good {
+            background-color: var(--success-green);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .feature-icon.fair {
+            background-color: var(--warning-orange);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .feature-text {
+            font-size: var(--text-xs);
+            color: var(--neutral-text);
+            font-weight: 600;
+        }
+
+        .benefits-list {
+            padding: var(--space-5);
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--space-3);
+            font-size: var(--text-sm);
+            transition: all var(--transition-fast);
+        }
+        
+        .benefit-item:hover {
+            color: var(--primary-red);
+            transform: translateX(4px);
+        }
+
+        .benefit-item i {
+            color: var(--primary-red);
+            margin-right: var(--space-3);
+            font-size: var(--text-base);
+            transition: all var(--transition-fast);
+        }
+
+        .highlight {
+            background-color: #fff3cd;
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            color: var(--warning-orange);
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-4);
+            padding: var(--space-5);
+            background-color: var(--neutral-light);
+        }
+
+        .btn-details {
+            background-color: var(--neutral-dark);
+            color: var(--neutral-white);
+            border: none;
+            padding: var(--space-4) var(--space-5);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            font-family: var(--font-primary);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            transition: all var(--transition-base);
+            min-height: 44px;
+        }
+
+        .btn-official {
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+            color: var(--neutral-white);
+            border: none;
+            padding: var(--space-4) var(--space-5);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            font-family: var(--font-primary);
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-base);
+            min-height: 44px;
+        }
+
+        .btn-details:hover {
+            background-color: var(--info-blue);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-official:hover {
+            background: linear-gradient(135deg, var(--primary-red-dark) 0%, #a93226 100%);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .btn-details:active, .btn-official:active {
+            transform: translateY(0);
+        }
+
+        /* 1位のクリニックを特別に目立たせる */
+        .ranking-card:first-of-type {
+            border: 3px solid var(--secondary-gold);
+            transform: scale(1.02);
+            box-shadow: var(--shadow-lg), 0 0 20px rgba(241, 196, 15, 0.3);
+            position: relative;
+        }
+        
+        .ranking-card:first-of-type::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, var(--secondary-gold), var(--secondary-gold-dark));
+            z-index: -1;
+            border-radius: var(--radius-lg);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        .ranking-card:first-of-type .benefits-list {
+            padding: var(--space-6) var(--space-5);
+        }
+
+        @media (min-width: 768px) {
+            .ranking-container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 24px;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                gap: 24px;
+            }
+
+            .ranking-header {
+                grid-column: 1 / -1;
+                margin-bottom: 0;
+            }
+
+            .clinic-name {
+                font-size: 18px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+
+            .feature-item {
+                padding: 16px 12px;
+            }
+        }
+        
+        /* 地域選択UIを非表示 */
+        .region-selector,
+        .area-selector,
+        .location-selector,
+        [class*="region-select"],
+        [class*="area-select"],
+        [class*="location-select"],
+        .region-dropdown,
+        .area-dropdown {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- 統一ランキング同期システム -->
+    <script src="clinic-database-generated.js"></script>
+    <script src="ranking-sync-system.js"></script>
+    <div class="ranking-container">
+        <div class="ranking-header">
+            <h2>【医師監修】<span data-region="name">千葉</span>で信頼できる医療脱毛クリニック総合ランキング</h2>
+        </div>
+
+        <!-- 第1位：湘南美容クリニック -->
+        <div class="ranking-card">
+            <div class="ranking-badge">🏆 第1位 最もおすすめ</div>
+            <div class="clinic-name">湘南美容クリニック <span data-region="name">千葉</span>院（医療脱毛）</div>
+            <div class="card-content">
+                <div class="clinic-image" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 375 200\"><rect width=\"375\" height=\"200\" fill=\"%23e74c3c\"/><text x=\"50%\" y=\"40%\" text-anchor=\"middle\" dy=\".3em\" fill=\"white\" font-size=\"16\">湘南美容クリニック</text><text x=\"50%\" y=\"60%\" text-anchor=\"middle\" dy=\".3em\" fill=\"white\" font-size=\"12\">医療脱毛専門</text></svg>')">
+                    <div class="price-overlay">
+                        <div class="price-large">6,180円</div>
+                        <div class="price-small">両ワキ脱毛/6回</div>
+                    </div>
+                </div>
+                
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-title">料金満足度</div>
+                        <div class="feature-icon excellent">◎</div>
+                        <div class="feature-text">6,180円<br>両ワキ脱毛6回</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-title">脱毛効果</div>
+                        <div class="feature-icon excellent">◎</div>
+                        <div class="feature-text">脱毛満足度98.6%</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-title">来院のしやすさ</div>
+                        <div class="feature-icon excellent">◎</div>
+                        <div class="feature-text">全国130院展開</div>
+                    </div>
+                </div>
+
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>全国130院展開で<span class="highlight">通いやすさNo.1</span></span>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>脱毛満足度<span class="highlight">98.6%の圧倒的な施術効果</span></span>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>両ワキ脱毛6,180円から始められる<span class="highlight">リーズナブルな価格</span></span>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>医療脱毛専門クリニックで<span class="highlight">プライバシー配慮</span></span>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>23時まで診療で<span class="highlight">仕事帰りに通いやすい</span></span>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn-details">
+                        詳細を見る
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <button class="btn-official">
+                        今すぐ無料カウンセリング予約
+                        <i class="fas fa-calendar-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第2位：TCB東京中央美容外科 -->
+        <div class="ranking-card">
+            <div class="ranking-badge">🥈 第2位</div>
+            <div class="clinic-name">TCB東京中央美容外科 <span data-region="name">千葉</span>院</div>
+            <div class="card-content">
+                <div class="clinic-image" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 375 200\"><rect width=\"375\" height=\"200\" fill=\"%23333\"/><text x=\"50%\" y=\"40%\" text-anchor=\"middle\" dy=\".3em\" fill=\"white\" font-size=\"16\">リゼクリニック</text><text x=\"50%\" y=\"60%\" text-anchor=\"middle\" dy=\".3em\" fill=\"white\" font-size=\"12\">医療脱毛</text></svg>')">
+                    <div class="price-overlay">
+                        <div class="price-large">19,800円</div>
+                        <div class="price-small">両ワキ脱毛/5回</div>
+                    </div>
+                </div>
+                
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-title">料金満足度</div>
+                        <div class="feature-icon excellent">◎</div>
+                        <div class="feature-text">19,800円<br>両ワキ脱毛5回</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-title">脱毛効果</div>
+                        <div class="feature-icon good">○</div>
+                        <div class="feature-text">高い脱毛効果</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-title">来院のしやすさ</div>
+                        <div class="feature-icon excellent">◎</div>
+                        <div class="feature-text">全国26院</div>
+                    </div>
+                </div>
+
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>全国26院の<span class="highlight">優れたアクセス</span></span>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>両ワキ脱毛19,800円から始められる適正価格</span>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>蓄熱式・熱破壊式など最新脱毛機器も対応</span>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn-details">
+                        詳細を見る
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <button class="btn-official">
+                        無料カウンセリング予約
+                        <i class="fas fa-external-link-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第3位：エミナルクリニック -->
+        <div class="ranking-card">
+            <div class="ranking-badge">🥉 第3位</div>
+            <div class="clinic-name">エミナルクリニック <span data-region="name">千葉</span>院</div>
+            <div class="card-content">
+                <div class="clinic-image" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 375 200\"><rect width=\"375\" height=\"200\" fill=\"%23333\"/><text x=\"50%\" y=\"40%\" text-anchor=\"middle\" dy=\".3em\" fill=\"white\" font-size=\"16\">エミナルクリニック</text><text x=\"50%\" y=\"60%\" text-anchor=\"middle\" dy=\".3em\" fill=\"white\" font-size=\"12\">医療脱毛</text></svg>')">
+                    <div class="price-overlay">
+                        <div class="price-large">119,000円</div>
+                        <div class="price-small">全身脱毛/5回</div>
+                    </div>
+                </div>
+                
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-title">料金満足度</div>
+                        <div class="feature-icon fair">○</div>
+                        <div class="feature-text">119,000円<br>全身脱毛5回</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-title">脱毛効果</div>
+                        <div class="feature-icon good">○</div>
+                        <div class="feature-text">高い</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-title">来院のしやすさ</div>
+                        <div class="feature-icon good">○</div>
+                        <div class="feature-text">全国60院</div>
+                    </div>
+                </div>
+
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>全国60院展開で<span class="highlight">通いやすい環境</span></span>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>蓄熱式ダイオードレーザーなど高度な脱毛機器も選択可能</span>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>追加料金なしの<span class="highlight">明朗会計システム</span></span>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn-details">
+                        詳細を見る
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <button class="btn-official">
+                        無料カウンセリング予約
+                        <i class="fas fa-external-link-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 地域設定ファイル読み込み -->
+    <script src="region-config-enhanced.js"></script>
+    <script src="region-handler-enhanced.js"></script>
+    <script src="clinic-database.js"></script>
+    
+    <script>
+        // 地域名の動的置換処理
+        function initializeRegionData() {
+            console.log('=== 地域データ初期化開始 ===');
+            
+            // REGION_CONFIG_ENHANCEDの存在確認
+            if (typeof REGION_CONFIG_ENHANCED === 'undefined') {
+                console.error('REGION_CONFIG_ENHANCEDが読み込まれていません');
+                return;
+            }
+            
+            // URLパラメータから地域IDを取得
+            const regionId = REGION_CONFIG_ENHANCED.getRegionIdFromUrl() || REGION_CONFIG_ENHANCED.defaultRegionId;
+            const regionName = REGION_CONFIG_ENHANCED.getRegionNameById(regionId);
+            
+            console.log('取得した地域ID:', regionId);
+            console.log('取得した地域名:', regionName);
+            console.log('現在のURL:', window.location.href);
+            
+            // 地域名を表示（全ての要素を更新）
+            const regionNameElements = document.querySelectorAll('[data-region="name"]');
+            console.log('地域名要素の数:', regionNameElements.length);
+            
+            regionNameElements.forEach((element, index) => {
+                console.log(`地域名要素${index}を更新: ${element.textContent} → ${regionName}`);
+                element.textContent = regionName;
+            });
+            
+            // 地域データを取得してクリニック情報を更新
+            const regionData = REGION_CONFIG_ENHANCED.getRegionDataById(regionId);
+            if (regionData && regionData.clinics) {
+                console.log('クリニックデータを更新:', regionData.clinics.length, '件');
+                updateClinicData(regionData.clinics);
+            } else {
+                console.log('クリニックデータが見つかりません');
+            }
+            
+            console.log('=== 地域データ初期化完了 ===');
+        }
+        
+        // クリニックデータを更新
+        function updateClinicData(clinics) {
+            const clinicCards = document.querySelectorAll('.ranking-card');
+            clinics.forEach((clinic, index) => {
+                if (index < clinicCards.length) {
+                    const card = clinicCards[index];
+                    const nameElement = card.querySelector('.clinic-name');
+                    if (nameElement && clinic.name) {
+                        nameElement.textContent = clinic.name;
+                    }
+                    
+                    // 料金情報を更新
+                    const priceElement = card.querySelector('.price-large');
+                    if (priceElement && clinic.price) {
+                        priceElement.textContent = clinic.price;
+                    }
+                }
+            });
+        }
+        
+        // ボタンアニメーション
+        document.querySelectorAll('.btn-details, .btn-official').forEach(button => {
+            button.addEventListener('click', function() {
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            });
+        });
+        
+        // 初期化処理
+        document.addEventListener('DOMContentLoaded', function() {
+            // 少し遅延させてJavaScriptファイルの読み込みを待つ
+            setTimeout(() => {
+                initializeRegionData();
+                
+                // 地域選択UIを強制的に削除
+                const regionSelectors = document.querySelectorAll('.region-selector, .area-selector, .location-selector, [class*="region-select"], [class*="area-select"], [class*="location-select"], .region-dropdown, .area-dropdown');
+                regionSelectors.forEach(element => {
+                    element.remove();
+                    console.log('地域選択UIを削除しました:', element);
+                });
+            }, 100);
+        });
+        
+        // 追加のエラーハンドリング
+        window.addEventListener('error', function(e) {
+            console.error('JavaScript エラー:', e.error);
+        });
+    </script>
+</body>
+</html>
