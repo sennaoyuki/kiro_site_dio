@@ -16,6 +16,8 @@ class ParameterCSVDataLoader {
      */
     async loadAllData() {
         try {
+            console.log('Starting CSV data load from:', this.dataPath);
+            
             const [clinics, rankings, stores, regions] = await Promise.all([
                 this.loadClinicData(),
                 this.loadRankingData(),
@@ -23,9 +25,18 @@ class ParameterCSVDataLoader {
                 this.loadRegionData()
             ]);
 
+            console.log('CSV data loaded successfully:', {
+                clinics: clinics.size,
+                rankings: rankings.size,
+                stores: stores.size,
+                regions: regions.size
+            });
+
             return { clinics, rankings, stores, regions };
         } catch (error) {
             console.error('Failed to load CSV data:', error);
+            console.error('Current location:', window.location.href);
+            console.error('Base path:', this.dataPath);
             throw error;
         }
     }
@@ -35,8 +46,10 @@ class ParameterCSVDataLoader {
      */
     async loadClinicData() {
         try {
-            const response = await fetch(`${this.dataPath}出しわけSS - items.csv`);
-            if (!response.ok) throw new Error(`Failed to load clinic data: ${response.status}`);
+            const url = encodeURI(`${this.dataPath}出しわけSS - items.csv`);
+            console.log('Loading clinic data from:', url);
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`Failed to load clinic data: ${response.status} ${response.statusText}`);
             
             const text = await response.text();
             const lines = text.split('\n').filter(line => line.trim());
@@ -66,7 +79,8 @@ class ParameterCSVDataLoader {
      */
     async loadRankingData() {
         try {
-            const response = await fetch(`${this.dataPath}出しわけSS - ranking.csv`);
+            const url = encodeURI(`${this.dataPath}出しわけSS - ranking.csv`);
+            const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to load ranking data: ${response.status}`);
             
             const text = await response.text();
@@ -101,7 +115,8 @@ class ParameterCSVDataLoader {
      */
     async loadStoreData() {
         try {
-            const response = await fetch(`${this.dataPath}出しわけSS - stores.csv`);
+            const url = encodeURI(`${this.dataPath}出しわけSS - stores.csv`);
+            const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to load store data: ${response.status}`);
             
             const text = await response.text();
@@ -188,7 +203,8 @@ class ParameterCSVDataLoader {
      */
     async loadRegionData() {
         try {
-            const response = await fetch(`${this.dataPath}出しわけSS - region.csv`);
+            const url = encodeURI(`${this.dataPath}出しわけSS - region.csv`);
+            const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to load region data: ${response.status}`);
             
             const text = await response.text();

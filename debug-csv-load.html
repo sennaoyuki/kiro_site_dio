@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV読み込みデバッグ</title>
+    <style>
+        body {
+            font-family: monospace;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        .result {
+            background-color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .success {
+            border-left: 4px solid #4CAF50;
+        }
+        .error {
+            border-left: 4px solid #f44336;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <h1>CSV読み込みデバッグツール</h1>
+    
+    <div id="results"></div>
+
+    <script>
+        const results = document.getElementById('results');
+        
+        async function testCSVLoad() {
+            const files = [
+                'data2/出しわけSS - items.csv',
+                'data2/出しわけSS - ranking.csv',
+                'data2/出しわけSS - region.csv',
+                'data2/出しわけSS - stores.csv'
+            ];
+            
+            for (const file of files) {
+                const div = document.createElement('div');
+                div.className = 'result';
+                
+                try {
+                    console.log(`Testing: ${file}`);
+                    const response = await fetch(file);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    const text = await response.text();
+                    const lines = text.split('\n').filter(line => line.trim());
+                    
+                    div.className += ' success';
+                    div.innerHTML = `
+                        <h3>✅ ${file}</h3>
+                        <p>Status: ${response.status} ${response.statusText}</p>
+                        <p>Lines: ${lines.length}</p>
+                        <p>First line: ${lines[0]}</p>
+                        <p>Sample data: ${lines[1] || 'No data'}</p>
+                        <details>
+                            <summary>Response Headers</summary>
+                            <pre>${Array.from(response.headers.entries()).map(([k,v]) => `${k}: ${v}`).join('\n')}</pre>
+                        </details>
+                    `;
+                } catch (error) {
+                    div.className += ' error';
+                    div.innerHTML = `
+                        <h3>❌ ${file}</h3>
+                        <p>Error: ${error.message}</p>
+                        <p>This might be due to:</p>
+                        <ul>
+                            <li>File not found</li>
+                            <li>Encoding issues</li>
+                            <li>CORS policy</li>
+                            <li>Special characters in filename</li>
+                        </ul>
+                    `;
+                    console.error(`Error loading ${file}:`, error);
+                }
+                
+                results.appendChild(div);
+            }
+            
+            // Test with encoded filenames
+            const encodedDiv = document.createElement('div');
+            encodedDiv.className = 'result';
+            encodedDiv.innerHTML = '<h2>エンコードされたファイル名でのテスト</h2>';
+            results.appendChild(encodedDiv);
+            
+            const encodedFile = encodeURI('data2/出しわけSS - items.csv');
+            try {
+                const response = await fetch(encodedFile);
+                const text = await response.text();
+                
+                const div = document.createElement('div');
+                div.className = 'result success';
+                div.innerHTML = `
+                    <h3>✅ Encoded URL Test</h3>
+                    <p>URL: ${encodedFile}</p>
+                    <p>Success!</p>
+                `;
+                results.appendChild(div);
+            } catch (error) {
+                const div = document.createElement('div');
+                div.className = 'result error';
+                div.innerHTML = `
+                    <h3>❌ Encoded URL Test Failed</h3>
+                    <p>URL: ${encodedFile}</p>
+                    <p>Error: ${error.message}</p>
+                `;
+                results.appendChild(div);
+            }
+        }
+        
+        // 実行
+        testCSVLoad();
+    </script>
+</body>
+</html>
