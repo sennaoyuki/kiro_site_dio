@@ -320,13 +320,6 @@
             <div class="header-search">
                 <!-- Desktop Search Form -->
                 <div class="search-form-inline">
-                    <select class="search-select-compact" id="area-select">
-                        <option>地域</option>
-                        <option>東京都</option>
-                        <option>大阪府</option>
-                        <option>愛知県</option>
-                        <option>神奈川県</option>
-                    </select>
                     <select class="search-select-compact" id="method-select">
                         <option>脱毛方法</option>
                         <option>レーザー脱毛</option>
@@ -360,13 +353,6 @@
                     <option>ワキ脱毛</option>
                     <option>脚脱毛</option>
                     <option>全身脱毛</option>
-                </select>
-                <select class="dropdown-select">
-                    <option>都道府県</option>
-                    <option>東京都</option>
-                    <option>大阪府</option>
-                    <option>愛知県</option>
-                    <option>神奈川県</option>
                 </select>
                 <select class="dropdown-select">
                     <option>脱毛方法</option>
@@ -425,17 +411,16 @@
         }
 
         function performSearch() {
-            const area = document.getElementById('area-select').value;
             const method = document.getElementById('method-select').value;
             
-            console.log('デスクトップ検索実行:', { area, method });
+            console.log('デスクトップ検索実行:', { method });
             
             // シミュレーション: 検索結果にスクロール
             if (window.parent) {
                 window.parent.postMessage({
                     type: 'navigate',
                     url: '#ranking-results',
-                    search: { area, method }
+                    search: { method }
                 }, '*');
             }
         }
@@ -445,7 +430,7 @@
             const searchData = {};
             
             selects.forEach((select, index) => {
-                const keys = ['part', 'area', 'method', 'budget'];
+                const keys = ['part', 'method', 'budget'];
                 searchData[keys[index]] = select.value;
             });
             

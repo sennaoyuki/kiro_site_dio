@@ -20,7 +20,7 @@
 
         .detailed-container {
             padding: 16px;
-            max-width: 375px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -547,6 +547,25 @@
     <script src="clinic-database-generated.js"></script>
     <script src="ranking-sync-system.js"></script>
     <div class="detailed-container">
+        <!-- コンテンツは ranking-sync-system.js により動的に生成されます -->
     </div>
+    
+    <script>
+        // ページ読み込み完了時に初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('=== Detailed Content: 初期化開始 ===');
+            
+            // ランキング同期システムの初期化を待つ
+            setTimeout(function() {
+                if (typeof RankingSyncSystem !== 'undefined') {
+                    const system = new RankingSyncSystem();
+                    system.initialize();
+                    console.log('Detailed Content: RankingSyncSystem 初期化完了');
+                } else {
+                    console.error('Detailed Content: RankingSyncSystem が見つかりません');
+                }
+            }, 100);
+        });
+    </script>
 </body>
 </html>
